@@ -3,8 +3,17 @@ $conexion = new mysqli("localhost", "root", "", "liga");
 if ($conexion->connect_errno) {
     echo "Fallo al conectar a MySQL: (" . $conexion->connect_errno . ") " . $conexion->connect_error;
 }else {
-  $resultado = $conexion->query("INSERT INTO equipo (id_equipo,nombre,ciudad) VALUES ('14', 'Los Robertos', 'Torrent')");
+  $consulta="INSERT INTO equipo (id_equipo,nombre,ciudad) VALUES ('14', 'Los Robertos', 'Torrent')";
+
+  $resultado =$conexion->query($consulta);
+  if (!$resultado)echo $conexion->error;
+
+  $consulta="SELECT * FROM equipo ORDER BY id_equipo DESC LIMIT 1";
+  $resultado= $conexion->query($consulta);
+
+
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
@@ -22,9 +31,26 @@ if ($conexion->connect_errno) {
     <a href="#" class="brand-logo">Logo</a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
       <li><a href="index.php">Lista Equipos</a></li>
+      <li><a href="insertar.php">Insertar</a></li>
 
     </ul>
   </div>
+  <table>
+    <tr>
+      <td>Id Equipo</td>
+      <td>Nombre</td>
+      <td>Ciudad</td>
+    </tr>
+    <?php
+    foreach ($resultado as $jugador) {
+      echo "<tr>";
+      echo "<td>".$jugador{'id_equipo'}."</td>";
+      echo "<td>".$jugador{'nombre'}."</td>";
+      echo "<td>".$jugador{'ciudad'}."</td>";
+      echo "</tr>";
+    }
+    ?>
+  </table>
 </nav>
   </div>
     <!-- Compiled and minified CSS -->
